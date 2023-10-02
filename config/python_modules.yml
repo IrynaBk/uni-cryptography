@@ -4,3 +4,8 @@ development:
     a: 3125
     m: 8191
     c: 3
+production:
+  lc_generator:
+    a: 3125
+    m: 8191
+    c: 3
