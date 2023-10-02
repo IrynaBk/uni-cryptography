@@ -1,0 +1,30 @@
+<div class="flex flex-col items-start">
+
+  <% if flash[:error].present? %>
+    <div class="bg-red-500 text-white p-4 rounded mb-4">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+
+  <%= form_with(url: generate_numbers_path, method: :get, local: true) do |form| %>
+    <div class="mb-6">
+      <%= form.label :x, "Initial Value:", class: 'block font-bold mb-2' %>
+      <%= form.number_field :x, required: true, class: 'w-full p-2 border border-gray-300 rounded' %>
+    </div>
+    <div class="mb-6">
+      <%= form.label :n, "Number Count:", class: 'block font-bold mb-2' %>
+      <%= form.number_field :n, required: true, class: 'w-full p-2 border border-gray-300 rounded' %>
+    </div>
+    <%= form.submit "Generate Numbers", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+  <% end %>
+
+  <h1 class="mt-6 text-xl">Generated Numbers</h1>
+  <p class="mt-2 text-lg">Period: <%= @period %></p>
+
+  <div class="mt-4 mb-6">
+    <%= @numbers.join(", ") %>
+  </div>
+
+  <%= link_to "Download", download_numbers_path, class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full block text-center' %>
+
+</div>
