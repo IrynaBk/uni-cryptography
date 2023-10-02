@@ -1,6 +1,6 @@
 
 class LCGennerator:
-    def __init__(self, x, n, a = 5**5, m = 2**13 - 1, c = 3 ) -> None:
+    def __init__(self, x, n, a = 5**5, m = 2**13 - 1, c = 3 ):
         self.start_value = x
         self.number = n
         self.a = a
