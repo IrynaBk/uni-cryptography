@@ -26,12 +26,21 @@ class NumbersController < ApplicationController
   private
 
   def check_params
+    errors = []
+  
     x = params[:x].to_i
     n = params[:n].to_i
+
+    errors << "Value for x should be an integer." unless params[:x].to_s == x.to_s
+    errors << "Value for n should be an integer." unless params[:n].to_s == n.to_s
     
-    if x < 0 || n < 0
-      flash[:error] = "Values cannot be negative."
+    errors << "Value for x cannot be negative." if x < 0
+    errors << "Value for n cannot be negative." if n < 0
+    
+    unless errors.empty?
+      flash[:error] = errors.join(' ')
       redirect_to root_path
     end
+    
   end
 end
