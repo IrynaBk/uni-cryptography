@@ -15,8 +15,8 @@ class NumbersController < ApplicationController
   def download
     @numbers = session[:numbers]
     if @numbers.empty?
-      flash[:alert] = "Error: No numbers to download."
-      # redirect_to root_path
+      flash[:error] = "Error: No numbers to download."
+      redirect_to root_path
     else
       content = @numbers.join("\n")
       send_data content, filename: "numbers.txt", type: "text/plain", disposition: "attachment"
