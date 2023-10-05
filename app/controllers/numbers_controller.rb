@@ -39,7 +39,6 @@ class NumbersController < ApplicationController
     
     unless errors.empty?
       flash[:error] = errors.join(' ')
-      redirect_to root_path
     end
     
   end
