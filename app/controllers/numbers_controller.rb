@@ -28,11 +28,11 @@ class NumbersController < ApplicationController
   def check_params
     errors = []
   
+    errors << "Value for x should be an integer." unless params[:x].is_a? Integer
+    errors << "Value for n should be an integer." unless params[:n].is_a? Integer
+
     x = params[:x].to_i
     n = params[:n].to_i
-
-    errors << "Value for x should be an integer." unless params[:x].to_s == x.to_s
-    errors << "Value for n should be an integer." unless params[:n].to_s == n.to_s
     
     errors << "Value for x cannot be negative." if x < 0
     errors << "Value for n cannot be negative." if n < 0
