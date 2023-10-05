@@ -3,8 +3,8 @@ class NumbersController < ApplicationController
 
   def generate
     config = Rails.configuration.python_modules.lc_generator
-    x = params[:x] || 0
-    n = params[:n] || 0
+    x = params[:x].to_i || 0
+    n = params[:n].to_i || 0
     result = `python lib/assets/python/generate_numbers.py #{config[:a]} #{config[:m]} #{config[:c]} #{x} #{n}`
     data = JSON.parse(result)
     @numbers = data["result"]
@@ -26,20 +26,18 @@ class NumbersController < ApplicationController
   private
 
   def check_params
-    errors = []
-  
-    errors << "Value for x should be an integer." unless params[:x].is_a? Integer
-    errors << "Value for n should be an integer." unless params[:n].is_a? Integer
-
-    x = params[:x].to_i
-    n = params[:n].to_i
+    if params[:x] && params[:n]
+      errors = []
+      
+      if  !(params[:x] =~ /\A\d+\z/ && params[:n] =~ /\A\d+\z/)
+        errors << "Parameters should be non-negative integers."
+        params[:x] = 0
+        params[:n] = 0
+      end
     
-    errors << "Value for x cannot be negative." if x < 0
-    errors << "Value for n cannot be negative." if n < 0
-    
-    unless errors.empty?
-      flash[:error] = errors.join(' ')
+      unless errors.empty?
+        flash[:error] = errors.join(' ')
+      end
     end
-    
   end
 end
