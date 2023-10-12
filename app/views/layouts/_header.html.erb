@@ -1,0 +1,18 @@
+<div class="bg-gray-800 p-4">
+  <div class="container mx-auto">
+    <div class="flex justify-between items-center">
+      <h1 class="text-white text-2xl">My cool app!!</h1>
+
+      <nav>
+        <ul class="flex space-x-4">
+          <li>
+            <%= link_to 'MD5 Hash', md5_hash_path, class: 'text-white hover:text-gray-400' %>
+          </li>
+          <li>
+            <%= link_to 'Generate Numbers', generate_numbers_path, class: 'text-white hover:text-gray-400' %>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
