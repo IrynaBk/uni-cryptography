@@ -1,4 +1,5 @@
 class NumbersController < ApplicationController
+  include Downloadable
   before_action :check_params
 
   def generate
@@ -9,18 +10,12 @@ class NumbersController < ApplicationController
     data = JSON.parse(result)
     @numbers = data["result"]
     @period = data["period"]
-    session[:numbers] = @numbers
   end
 
   def download
-    @numbers = session[:numbers]
-    if @numbers.empty?
-      flash[:error] = "Error: No numbers to download."
-      redirect_to root_path
-    else
-      content = @numbers.join("\n")
-      send_data content, filename: "numbers.txt", type: "text/plain", disposition: "attachment"
-    end
+    @numbers = params[:numbers]
+    filename = params[:filename]
+    download_data(@numbers, filename)
   end
 
   private
@@ -30,7 +25,7 @@ class NumbersController < ApplicationController
       errors = []
       
       if  !(params[:x] =~ /\A\d+\z/ && params[:n] =~ /\A\d+\z/)
-        errors << "Parameters should be non-negative integers."
+        errors << "Parameters should be non-negative number."
         params[:x] = 0
         params[:n] = 0
       end

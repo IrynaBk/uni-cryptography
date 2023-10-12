@@ -1,30 +1,40 @@
-<div class="flex flex-col items-start">
 
-  <% if flash[:error].present? %>
-    <div class="bg-red-500 text-white p-4 rounded mb-4">
-      <%= flash[:error] %>
+  <div class="flex flex-col items-start ml-[10%] mr-[10%] mt-10">
+
+    <% if flash[:error].present? %>
+      <div class="bg-red-500 text-white p-4 rounded mb-4">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+    <h1 class="text-xl font-bold pb-8">Linear Congruential Generator</h1>
+    <%= form_with(url: generate_numbers_path, method: :get, local: true) do |form| %>
+      <div class="mb-6">
+        <%= form.label :x, "Initial Value:", class: 'block mb-2 w-[500px]' %>
+        <%= form.number_field :x, required: true, class: 'w-full p-2 border border-gray-300 rounded' %>
+      </div>
+      <div class="mb-6">
+        <%= form.label :n, "Number Count:", class: 'block mb-2' %>
+        <%= form.number_field :n, required: true, max: 50000, class: 'w-full p-2 border border-gray-300 rounded' %>
+      </div>
+      <%= form.submit "Generate Numbers", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+    <% end %>
+    <%= form_tag download_numbers_path, method: :post, data: { turbo: 'false' } do %>
+  <%= hidden_field_tag 'numbers', @numbers.join(",") %>
+    <div class="mb-4">
+      <%= label_tag :filename, "Enter Filename:", class: 'block mb-2' %>
+      <%= text_field_tag :filename, 'numbers', class: 'w-full p-2 border border-gray-300 rounded' %>
     </div>
+
+    <%= submit_tag "Download File", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full block text-center' %>
   <% end %>
 
-  <%= form_with(url: generate_numbers_path, method: :get, local: true) do |form| %>
-    <div class="mb-6">
-      <%= form.label :x, "Initial Value:", class: 'block font-bold mb-2' %>
-      <%= form.number_field :x, required: true, class: 'w-full p-2 border border-gray-300 rounded' %>
-    </div>
-    <div class="mb-6">
-      <%= form.label :n, "Number Count:", class: 'block font-bold mb-2' %>
-      <%= form.number_field :n, required: true, class: 'w-full p-2 border border-gray-300 rounded' %>
-    </div>
-    <%= form.submit "Generate Numbers", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
-  <% end %>
 
-  <h1 class="mt-6 text-xl">Generated Numbers</h1>
-  <p class="mt-2 text-lg">Period: <%= @period %></p>
 
-  <div class="mt-4 mb-6">
-    <%= @numbers.join(", ") %>
+    <h1 class="mt-6 text-xl">Generated Numbers</h1>
+    <p class="mt-2 text-lg">Period: <%= @period %></p>
+
+    <div class="mt-4 mb-6 overflow-y-auto max-h-[500px]">
+      <%= @numbers.join(", ") %>
+    </div>
+
   </div>
-
-  <%= link_to "Download", download_numbers_path, class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full block text-center' %>
-
-</div>
