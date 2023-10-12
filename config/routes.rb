@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get '/md5_hash', to: 'md5_hash#new'
+  resources :md5_hash, only: [:new, :create] do
+    post 'download', on: :collection
+  end
   root "numbers#generate"
   get 'numbers/generate', to: 'numbers#generate', as: :generate_numbers
   post 'numbers/download', to: 'numbers#download', as: :download_numbers

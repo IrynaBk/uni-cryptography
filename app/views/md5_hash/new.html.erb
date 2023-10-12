@@ -1,0 +1,43 @@
+
+  
+  <%= javascript_importmap_tags "md5_form" %>
+
+  <div class="flex flex-col items-start ml-[10%] mr-[10%] mt-10">
+
+    <% if flash[:error].present? %>
+      <div class="bg-red-500 text-white p-4 rounded mb-4">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+    <h1 class="text-xl font-bold pb-8">MD5 hash</h1>
+<%= form_with url: md5_hash_index_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+  <div class="mb-6">
+    <%= form.label :content, "Text:", class: 'block mb-2 w-[500px]' %>
+    <%= form.text_field :content, class: 'w-full p-2 border border-gray-300 rounded', id: 'stringInput' %>
+  </div>
+
+  <div class="mb-6">
+    <%= form.label :file, "Upload File:", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded', id: 'fileInput' %>
+  </div>
+
+  <%= form.submit "Generate Hash", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+<% end %>
+
+    
+    <h1 class="mt-6 text-xl">Generated hash</h1>
+
+    <div class="mt-4 mb-6 overflow-y-auto max-h-[500px]">
+      <%= @hash %>
+    </div>
+
+    <%= form_tag download_md5_hash_index_path, method: :post, data: { turbo: 'false' } do %>
+  <%= hidden_field_tag 'hash', @hash %>
+    <div class="mb-4">
+      <%= label_tag :filename, "Enter Filename:", class: 'block mb-2' %>
+      <%= text_field_tag :filename, 'hash', class: 'w-full p-2 border border-gray-300 rounded' %>
+    </div>
+    <%= submit_tag "Download File", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full block text-center' %>
+  <% end %>
+
+  </div>

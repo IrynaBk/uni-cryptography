@@ -80,10 +80,10 @@ def MD_to_hex(digest):
 
 
 def md5(msg):
-    if isinstance(msg, str):
-        msg = bytearray(msg, 'utf-8')
-    elif isinstance(msg, bytes):
-        msg = bytearray(msg)
+    # if isinstance(msg, str):
+    #     msg = bytearray(msg, 'utf-8')
+    # elif isinstance(msg, bytes):
+    #     msg = bytearray(msg)
     msg = pad(msg)
     processed_msg = processMessage(msg)
     message_hash = MD_to_hex(processed_msg)

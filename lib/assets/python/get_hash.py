@@ -1,11 +1,9 @@
 import sys
 from md5 import md5
 
-import sys
-import base64
+with open(sys.argv[1], 'rb') as f:  
+    content = f.read()
+byte_array_content = bytearray(content)
 
-encoded_content = sys.argv[1]
-decoded_content_bytes = base64.b64decode(encoded_content)
-
-print(md5(decoded_content_bytes))
+print(md5(byte_array_content))
 

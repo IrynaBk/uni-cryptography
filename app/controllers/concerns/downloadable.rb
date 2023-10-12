@@ -3,12 +3,20 @@ require 'base64'
 module Downloadable
     extend ActiveSupport::Concern
 
+    def get_hash(content)
+        file = Tempfile.new('temp_hash_file')
+        File.binwrite(file.path, content)  # use binwrite for binary content
+        hash = `python lib/assets/python/get_hash.py #{file.path}`
+        file.unlink
+        hash.strip
+      end
+      
+
     def create_file_hash(content, filename)
         File.write(filename, content)
         content = File.read(filename)
-        encoded_content = Base64.strict_encode64(content)
-        hash = `python lib/assets/python/get_hash.py #{encoded_content}`
-
+        hash = get_hash(content)
+        hash
     end
 
     def download_data(content, filename)
@@ -18,8 +26,7 @@ module Downloadable
         end
         filename = filename.presence || 'result'
         filename += ".txt" unless filename.end_with?(".txt")
-        encoded_content = Base64.strict_encode64(content)
-        stored_hash = `python lib/assets/python/get_hash.py #{encoded_content}`
+        stored_hash = get_hash(content)
         
         file_hash = create_file_hash(content, filename)
         if file_hash == stored_hash
