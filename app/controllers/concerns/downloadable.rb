@@ -5,7 +5,7 @@ module Downloadable
 
     def get_hash(content)
         file = Tempfile.new('temp_hash_file')
-        File.binwrite(file.path, content)  # use binwrite for binary content
+        File.binwrite(file.path, content)  # binary content
         hash = `python lib/assets/python/get_hash.py #{file.path}`
         file.unlink
         hash.strip
@@ -20,7 +20,7 @@ module Downloadable
     end
 
     def download_data(content, filename)
-        if content.empty?
+        if !content.present?
             flash[:error] = "Error: No data to download."
             redirect_to root_path
         end

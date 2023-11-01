@@ -1,0 +1,37 @@
+<div class="flex flex-col items-start ml-[10%] mr-[10%] mt-10">
+    <% if flash[:error].present? %>
+      <div class="bg-red-500 text-white p-4 rounded mb-4">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+    <h1 class="text-xl font-bold pb-8">Encrypt</h1>
+<%= form_with url:  rc5_encrypt_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+  <div class="mb-6">
+    <%= form.label :passcode, "Passcode:", class: 'block mb-2 w-[500px]' %>
+    <%= form.text_field :passcode, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <div class="mb-6">
+    <%= form.label :file, "Upload File(no more than 300 MB):", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Encrypt", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+<% end %>
+
+<div class="flex flex-col items-start mr-[10%] mt-10 mb-10px">
+
+    <h1 class="text-xl font-bold pb-8">Decrypt</h1>
+<%= form_with url:  rc5_decrypt_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+  <div class="mb-6">
+    <%= form.label :passcode, "Passcode:", class: 'block mb-2 w-[500px]' %>
+    <%= form.text_field :passcode, class: 'w-full p-2 border border-gray-300 rounded'%>
+  </div>
+
+  <div class="mb-6">
+    <%= form.label :file, "Upload File:", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Decrypt", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full mb-[10px]' %>
+<% end %>

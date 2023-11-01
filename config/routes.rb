@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  post 'rc5/encrypt'
+  post 'rc5/decrypt'
+  get 'rc5/new'
   get '/md5_hash', to: 'md5_hash#new'
   resources :md5_hash, only: [:new, :create] do
     post 'download', on: :collection

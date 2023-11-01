@@ -78,6 +78,8 @@ def MD_to_hex(digest):
     raw = digest.to_bytes(16, byteorder='little')
     return '{:032x}'.format(int.from_bytes(raw, byteorder='big'))
 
+def MD_to_bytes(digest):
+    return digest.to_bytes(16, byteorder='little')
 
 def md5(msg):
     # if isinstance(msg, str):
@@ -87,4 +89,10 @@ def md5(msg):
     msg = pad(msg)
     processed_msg = processMessage(msg)
     message_hash = MD_to_hex(processed_msg)
+    return message_hash
+
+def md5_to_bytes(msg):
+    msg = pad(msg)
+    processed_msg = processMessage(msg)
+    message_hash = MD_to_bytes(processed_msg)
     return message_hash
