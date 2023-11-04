@@ -5,11 +5,11 @@ class Rc5Controller < ApplicationController
   include FileTypeDetector
 
   before_action :load_file, only: [:encrypt, :decrypt]
-  before_action :check_passcode, only: [:decrypt]
+  # before_action :check_passcode, only: [:decrypt]
 
   def encrypt
     passcode = params[:passcode]
-    session[:passcode] = passcode
+    # session[:passcode] = passcode
     encrypted = `python lib/assets/python/get_encrypted_file.py #{temp_file_path} #{passcode}`
     send_data encrypted, filename: 'encrypted_file.txt', type: 'application/octet-stream', disposition: 'attachment'
   end
@@ -18,6 +18,7 @@ class Rc5Controller < ApplicationController
   end
 
   def decrypt
+    @passcode = params[:passcode]
     decrypted_data = Base64.decode64(`python lib/assets/python/get_decrypted_file.py #{temp_file_path} #{@passcode}`)
     type_info = determine_file_type(decrypted_data)
     content_type = type_info[:content_type]

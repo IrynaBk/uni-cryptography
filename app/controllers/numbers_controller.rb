@@ -3,10 +3,9 @@ class NumbersController < ApplicationController
   before_action :check_params
 
   def generate
-    config = Rails.configuration.python_modules.lc_generator
     x = params[:x].to_i || 0
     n = params[:n].to_i || 0
-    result = `python lib/assets/python/generate_numbers.py #{config[:a]} #{config[:m]} #{config[:c]} #{x} #{n}`
+    result = `python lib/assets/python/generate_numbers.py #{x} #{n}`
     data = JSON.parse(result)
     @numbers = data["result"]
     @period = data["period"]
