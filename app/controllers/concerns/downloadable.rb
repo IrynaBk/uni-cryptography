@@ -9,14 +9,14 @@ module Downloadable
         hash = `python lib/assets/python/get_hash.py #{file.path}`
         file.unlink
         hash.strip
-      end
+    end
       
 
     def create_file_hash(content, filename)
         File.write(filename, content)
         content = File.read(filename)
         hash = get_hash(content)
-        hash
+        hash.strip
     end
 
     def download_data(content, filename)
@@ -32,7 +32,6 @@ module Downloadable
         if file_hash == stored_hash
             send_data File.read(filename), filename: filename, type: "text/plain", disposition: "attachment"
             File.delete(filename)
-
         else
             flash[:error] = "Error: File integrity issue detected."
             redirect_to root_path
