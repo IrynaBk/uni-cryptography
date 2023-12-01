@@ -1,0 +1,118 @@
+<div class="flex flex-col justify-end items-start ml-[10%] mr-[10%] mt-10">
+  <% if flash[:error].present? %>
+    <div class="bg-red-500 text-white p-4 rounded mb-4">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+    <div class="mt-2">
+    <img src="<%= image_path('shawn2.png') %>" alt="Shaun the Sheep" class="mt-2 max-w-full" style="max-width: 200px; height: auto;"/>
+      <p>This is my public key; you're gonna use it to encrypt the message for me:</p>
+       <%= @public_key %>
+    </div>
+      <div class="flex flex-col items-start mr-[10%] mt-10 mb-10px">
+
+  <h1 class="text-xl font-bold pb-4">Encrypt</h1>
+  
+  <%= form_with url:  rsa_encrypt_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+  <div class="mb-2">
+    <%= form.label :file, "Upload File(only txt, pdf, png and jpg):", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Encrypt", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+<% end %>
+
+  <% if defined?(@encoded_data) %>
+    <div class="mt-4">
+      <strong>Encoded Data:</strong>
+      <textarea rows="4" class="w-full p-2 mt-2 border rounded-md overflow-auto" readonly><%= @encoded_data %></textarea>
+      <button id="copy-button" class="w-full bg-green-500 text-black p-2 rounded-md hover:bg-green-600 mt-2">Copy</button>
+    </div>
+  <% end %>
+</div>
+  <div class="flex flex-col items-start mr-[10%] mt-10 mb-10px">
+    <h1 class="text-xl font-bold pb-4">Decrypt</h1>
+   
+
+    <%= form_with url:  rsa_decrypt_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+  <div class="mb-2">
+    <%= form.label :file, "Upload File encrypted:", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Decrypt", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+<% end %>
+
+    <% if defined?(@decrypted_data) %>
+      <div class="mt-4">
+        <strong>Plain Text:</strong> <%= @decrypted_data %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex flex-col items-start mr-[10%] mt-10 mb-10px">
+    <h1 class="text-xl font-bold pb-4">Benchmark</h1>
+    <%= form_with(url: rsa_benchmark_path, method: :post, local: true, html: { 'data-turbo': 'false', id: 'benchmark-form' }) do |form| %>
+      <label for="iterations">Number of Iterations:</label>
+      <%= text_field_tag 'iterations', nil, placeholder: 'Enter number of iterations', required: true, class: 'w-full p-2 mt-2 border rounded-md' %>
+      <%= form.submit "Run Benchmark", class: 'w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 mt-4' %>
+    <% end %>
+       <button id="compare-button" class="bg-green-500 text-white p-2 rounded hover:bg-green-600 w-full mt-4">
+      Compare RC5 and RSA
+    </button>
+
+    <% if defined?(@rsa_time) && defined?(@rc5_time) %>
+      <p class="mt-2"><strong>RSA Time:</strong> <%= @rsa_time %></p>
+      <p><strong>RC5 Time:</strong> <%= @rc5_time %></p>
+    <% end %>
+
+ 
+
+    <div class="chart-container mt-4" style="position: relative; height:40vh; width:80vw">
+      <canvas id="benchmark-chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const compareButton = document.getElementById('compare-button');
+    const benchmarkForm = document.getElementById('benchmark-form');
+    
+    compareButton.addEventListener('click', function () {
+      benchmarkForm.submit();
+    });
+
+    <% if defined?(@rsa_time) && defined?(@rc5_time) %>
+      // Chart.js initialization
+      const ctx = document.getElementById('benchmark-chart').getContext('2d');
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['RSA', 'RC5'],
+          datasets: [{
+            label: 'Encryption Time (seconds)',
+            data: [<%= @rsa_time %>, <%= @rc5_time %>],
+            backgroundColor: [
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    <% end %>
+  });
+</script>

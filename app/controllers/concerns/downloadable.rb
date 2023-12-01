@@ -6,7 +6,8 @@ module Downloadable
     def get_hash(content)
         file = Tempfile.new('temp_hash_file')
         File.binwrite(file.path, content)  # binary content
-        hash = `python lib/assets/python/get_hash.py #{file.path}`
+        python_command = ENV['PYTHON_COMMAND']
+        hash = `#{python_command} lib/assets/python/get_hash.py #{file.path}`
         file.unlink
         hash.strip
     end

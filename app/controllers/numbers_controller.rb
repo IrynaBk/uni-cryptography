@@ -5,7 +5,8 @@ class NumbersController < ApplicationController
   def generate
     x = params[:x].to_i || 0
     n = params[:n].to_i || 0
-    result = `python lib/assets/python/generate_numbers.py #{x} #{n}`
+    python_command = ENV['PYTHON_COMMAND']
+    result = `#{python_command} lib/assets/python/generate_numbers.py #{x} #{n}`
     data = JSON.parse(result)
     @numbers = data["result"]
     @period = data["period"]

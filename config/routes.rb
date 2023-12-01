@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  post 'rsa/encrypt'
+  post 'rsa/decrypt'
+  get 'rsa/new'
+  post 'rsa/benchmark'
   post 'rc5/encrypt'
   post 'rc5/decrypt'
   get 'rc5/new'

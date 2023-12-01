@@ -1,0 +1,28 @@
+<div>
+  <h1 class="font-bold text-4xl">Rsa#encrypt</h1>
+
+  <%= form_tag({ controller: 'rsa', action: 'encrypt' }, method: 'post', remote: true) do %>
+    <label for="data">Enter Data:</label>
+    <%= text_field_tag 'data', nil, placeholder: 'Type your data here', required: true %>
+    <%= submit_tag 'Encrypt' %>
+  <% end %>
+
+  <div>
+    <h2>Public Key:</h2>
+    <p><%= @public_key.to_s %></p>
+  </div>
+
+  <% if @encrypted_data %>
+    <div>
+      <h2>Encrypted Data:</h2>
+      <p><%= @encrypted_data %></p>
+    </div>
+  <% end %>
+
+  <% if @decrypted_data %>
+    <div>
+      <h2>Decrypted Data:</h2>
+      <p><%= @decrypted_data %></p>
+    </div>
+  <% end %>
+</div>

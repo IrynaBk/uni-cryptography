@@ -10,7 +10,8 @@ class Rc5Controller < ApplicationController
   def encrypt
     passcode = params[:passcode]
     # session[:passcode] = passcode
-    encrypted = `python lib/assets/python/get_encrypted_file.py #{temp_file_path} #{passcode}`
+    python_command = ENV['PYTHON_COMMAND']
+    encrypted = `#{python_command} lib/assets/python/get_encrypted_file.py #{temp_file_path} #{passcode}`
     send_data encrypted, filename: 'encrypted_file.txt', type: 'application/octet-stream', disposition: 'attachment'
   end
 
@@ -19,7 +20,8 @@ class Rc5Controller < ApplicationController
 
   def decrypt
     @passcode = params[:passcode]
-    decrypted_data = Base64.decode64(`python lib/assets/python/get_decrypted_file.py #{temp_file_path} #{@passcode}`)
+    python_command = ENV['PYTHON_COMMAND']
+    decrypted_data = Base64.decode64(`#{python_command} lib/assets/python/get_decrypted_file.py #{temp_file_path} #{@passcode}`)
     type_info = determine_file_type(decrypted_data)
     content_type = type_info[:content_type]
     ext = type_info[:extension]
