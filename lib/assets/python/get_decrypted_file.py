@@ -1,7 +1,7 @@
 import os
 import sys
-from md5 import md5_to_bytes
-from rc5 import RC5
+from .md5 import md5_to_bytes
+from .rc5 import RC5
 import base64
 
 

@@ -1,0 +1,57 @@
+<!-- app/views/digital_signature/index.html.erb -->
+
+<div class="flex flex-col justify-end items-start ml-[10%] mr-[10%] mt-10">
+  <h1>Digital Signature Generation and Verification</h1>
+
+  <% if flash[:error].present? %>
+    <div class="bg-red-500 text-white p-4 rounded mb-4">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+
+<%= form_with url:  generate_signature_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+    <div class="mb-6">
+    <%= form.label :input_data, "Text:", class: 'block mb-2 w-[500px]' %>
+    <%= form.text_field :input_data, class: 'w-full p-2 border border-gray-300 rounded', id: 'stringInput' %>
+  </div>
+
+
+    <div class="mb-2">
+    <%= form.label :file, "Upload File(only txt, pdf, png and jpg):", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Generate signature", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+
+  <% end %>
+
+  <% if defined?(@signature) %>
+    <div class="mt-4">
+      <h2>Generated Signature:</h2>
+      <p><%= @signature %></p>
+      <%= link_to('Download Signature', download_signature_path(signature: @signature), class: 'text-blue-500 hover:underline') %>
+    </div>
+  <% end %>
+
+  <%= form_with url:  verify_signature_path, method: :post, local: true, html: { enctype: 'multipart/form-data', 'data-turbo': 'false' } do |form| %>
+
+    <div class="mb-2">
+    <%= form.label :file, "Choose File to Verify:", class: 'block mb-2' %>
+    <%= form.file_field :file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+      <div class="mb-2">
+    <%= form.label :signature_file, "Choose Signature File:", class: 'block mb-2' %>
+    <%= form.file_field :signature_file, class: 'w-full p-2 border border-gray-300 rounded' %>
+  </div>
+
+  <%= form.submit "Verify", class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full' %>
+
+  <% end %>
+
+  <% if @verification_result.present? %>
+    <div class="mt-4">
+      <h2>Verification Result:</h2>
+      <p><%= @verification_result %></p>
+    </div>
+  <% end %>
+</div>

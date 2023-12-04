@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   post 'rc5/decrypt'
   get 'rc5/new'
   get '/md5_hash', to: 'md5_hash#new'
+  get 'digital_signature/index'
+  get '/download_signature', to: 'digital_signature#download', as: :download_signature
+  post '/generate_signature', to: 'digital_signature#generate_signature'
+  post '/verify_signature', to: 'digital_signature#verify_signature'
   resources :md5_hash, only: [:new, :create] do
     post 'download', on: :collection
   end

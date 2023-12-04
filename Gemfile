@@ -49,7 +49,7 @@ gem "bootsnap", require: false
 gem 'openssl'
 
 gem 'dotenv-rails'
-
+gem 'simplecov', require: false, group: :test
 # Use Sass to process CSS
 # gem "sassc-rails"
 

@@ -1,4 +1,7 @@
 import os
+from lib.assets.python.md5 import md5_to_bytes
+from lib.assets.python.generators import LCGennerator
+import base64
 
 class RC5:
     def __init__(self, key, w=16, r=20):
@@ -127,3 +130,27 @@ class RC5:
             result += uncode
         return result
 
+def encode(key, data):
+    key = bytearray(key.encode('utf-8'))
+    key = md5_to_bytes(key)
+
+    ans = RC5(key, w=16, r=20)
+    l = ans.k_to_l()
+    s = ans.generate_s()
+    mix = ans.mixer(s, l)
+    enc = ans.encode(mix, data, s)
+    enc = base64.b64encode(enc).decode('utf-8')
+    return enc
+
+def decode(key, enc):
+    enc = base64.b64decode(enc)
+    key = bytearray(key.encode('utf-8'))
+    key = md5_to_bytes(key)
+    ans = RC5(key, w=16, r=20)
+    ans.set_key(key)
+    l = ans.k_to_l()
+    s = ans.generate_s()
+    mix = ans.mixer(s, l)
+
+    dec = ans.decode(mix, enc)
+    return dec
